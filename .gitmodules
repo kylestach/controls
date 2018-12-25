@@ -1,0 +1,3 @@
+[submodule "third_party/qpOASES"]
+	path = third_party/qpOASES
+	url = git@github.com:kylestach/qpOASES
