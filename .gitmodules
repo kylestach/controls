@@ -1,3 +1,6 @@
 [submodule "third_party/qpOASES"]
 	path = third_party/qpOASES
 	url = git@github.com:kylestach/qpOASES
+[submodule "third_party/googletest"]
+	path = third_party/googletest
+	url = git@github.com:google/googletest
