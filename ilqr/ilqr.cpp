@@ -4,27 +4,6 @@
 #include <limits>
 #include <iostream>
 
-template<int N>
-struct QuadratizedFinal {
-    Matrix<N> Q;
-    Matrix<N, 1> q;
-    double c;
-};
-
-template<int N, typename CostFinal>
-QuadratizedFinal<N> quadratize_final(CostFinal cost, Vector<N> x) {
-    QuadratizedFinal<N> result;
-
-    Quadratized<N, 1> quad_full = quadratize([&cost](Vector<N> x, Vector<1>, int t) {
-        return cost(x);
-    }, x, Vector<1>(0), 0);
-
-    result.Q = quad_full.Q;
-    result.q = quad_full.q;
-    result.c = quad_full.c;
-    return result;
-}
-
 template<int N, int M>
 void lqr_step(
         Linearized<N, M> l,
@@ -139,8 +118,9 @@ int main() {
 
     Vector<2> x(0, 0);
 
-    Policy<2, 1> p = ilqr<2, 1, ContinuousPendulum, QuadraticCost, ExponentialFinalCost>(pendulum, cost, cost_final, x, Vector<2>(M_PI, 0), 500);
-    for (int t = 0; t < 500; t++) {
+    int N = 600;
+    Policy<2, 1> p = ilqr<2, 1, ContinuousPendulum, QuadraticCost, ExponentialFinalCost>(pendulum, cost, cost_final, x, Vector<2>(M_PI, 0), N);
+    for (int t = 0; t < N; t++) {
         Vector<1> u = -(p.K[t] * x + p.k[t]);
         std::cout << x(0) << ", " << x(1) << ", " << u(0) << std::endl;
         x = g(x, u, t);

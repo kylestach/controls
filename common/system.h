@@ -119,3 +119,24 @@ Quadratized<N, M> quadratize(Cost cost, Vector<N> x, Vector<M> u, int t) {
 
     return result;
 }
+
+template<int N>
+struct QuadratizedFinal {
+    Matrix<N> Q;
+    Matrix<N, 1> q;
+    double c;
+};
+
+template<int N, typename CostFinal>
+QuadratizedFinal<N> quadratize_final(CostFinal cost, Vector<N> x) {
+    QuadratizedFinal<N> result;
+
+    Quadratized<N, 1> quad_full = quadratize([&cost](Vector<N> x, Vector<1>, int t) {
+        return cost(x);
+    }, x, Vector<1>(0), 0);
+
+    result.Q = quad_full.Q;
+    result.q = quad_full.q;
+    result.c = quad_full.c;
+    return result;
+}
