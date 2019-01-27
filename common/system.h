@@ -1,6 +1,7 @@
 #pragma once
 
 #include "eigen3/Eigen/Core"
+#include <vector>
 
 template<int N = Eigen::Dynamic, int M = N>
 using Matrix = Eigen::Matrix<double, N, M, M == 1 ? Eigen::ColMajor : Eigen::RowMajor>;
@@ -140,3 +141,9 @@ QuadratizedFinal<N> quadratize_final(CostFinal cost, Vector<N> x) {
     result.c = quad_full.c;
     return result;
 }
+
+template<int N, int M>
+struct Policy {
+    std::vector<Matrix<M, N>> K;
+    std::vector<Matrix<M, 1>> k;
+};

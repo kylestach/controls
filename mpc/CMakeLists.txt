@@ -1,9 +1,13 @@
 include_directories ("${PROJECT_SOURCE_DIR}/third_party/qpOASES/include")
 
-project (mpc)
+add_library (mpc INTERFACE)
+target_link_libraries (mpc INTERFACE qpOASES)
 
-add_executable (mpc mpc.cpp mpc.h)
-target_link_libraries (mpc qpOASES)
+add_library (nmpc INTERFACE)
+target_link_libraries (nmpc INTERFACE qpOASES)
 
-add_executable (nmpc nmpc.cpp mpc.h)
-target_link_libraries (nmpc qpOASES)
+add_executable (mpc_demo mpc_demo.cpp)
+target_link_libraries (mpc_demo mpc)
+
+add_executable (nmpc_demo nmpc_demo.cpp)
+target_link_libraries (nmpc_demo nmpc)

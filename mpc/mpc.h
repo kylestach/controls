@@ -1,7 +1,7 @@
 #pragma once
 
-#include "system.h"
 #include <qpOASES.hpp>
+#include "common/system.h"
 
 template<int N, int M>
 class ModelPredictiveController {

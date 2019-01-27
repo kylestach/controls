@@ -1,7 +1,7 @@
-#include "system.h"
-#include "mpc.h"
+#pragma once
 
-#include <iostream>
+#include <qpOASES.hpp>
+#include "common/system.h"
 
 template<int N, int M, int C, typename System, typename Cost, typename CostFinal, typename Constraint>
 class NonlinearModelPredictiveController {
@@ -196,18 +196,15 @@ public:
     }
 
     Vector<> plan(Vector<N> x0, Vector<N> r) {
-        // for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 15; i++) {
              iterate(x0);
-        // }
+        }
         Vector<> u0 = Vector<>::Zero(M * (L - 1));
         problem.getPrimalSolution(u0.data());
         return u0;
     }
 
     Vector<M> control(Vector<N> x0, Vector<N> r) {
-        for (int i = 0; i < 10; i++) {
-             iterate(x0);
-        }
         return plan(x0, r).template block<M, 1>(0, 0);
     }
 
@@ -223,51 +220,3 @@ protected:
 
     int L;
 };
-
-constexpr double dt = 0.01;
-
-struct System {
-    Vector<2> operator()(Vector<2> x, Vector<1> u, int t) {
-        return Vector<2>(x(1), u(0));
-    }
-};
-
-struct Cost {
-    double operator()(Vector<2> x, Vector<1> u, int t) {
-        return 0.0 * u(0) * u(0);
-    }
-};
-
-struct CostFinal {
-    double operator()(Vector<2> x) {
-        return 400 * (x(0) - 3) * (x(0) - 3) + 100 * x(1) * x(1);
-    }
-};
-
-struct Constraint {
-    Vector<1> operator()(Vector<2> x, Vector<1> u, int t) {
-        return Vector<1>(x(1));
-    }
-};
-
-int main() {
-    System system;
-    Cost cost;
-    CostFinal cost_final;
-    Constraint constraint;
-    Discretized<2, 1, System> disc{dt, system};
-    int N = 500;
-    NonlinearModelPredictiveController<2, 1, 1, Discretized<2, 1, System>, Cost, CostFinal, Constraint> nmpc(
-            disc, cost, cost_final, constraint,
-            Vector<1>(-1), Vector<1>(1),
-            Vector<1>(-0.5), Vector<1>(0.5),
-            N + 1
-        );
-
-    Vector<2> x(0, 0);
-    Vector<> u = nmpc.plan(x, Vector<2>::Zero());
-    for (int i = 0; i < N; i++) {
-        x = disc(x, Vector<1>(u(i)), i);
-        std::cout << x(0) << ", " << x(1) << ", " << u(i) << std::endl;
-    }
-}
