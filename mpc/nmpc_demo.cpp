@@ -1,7 +1,7 @@
 #include "nmpc.h"
 #include <iostream>
 
-constexpr double dt = 0.05;
+constexpr double dt = 0.1;
 
 struct System {
     Vector<2> operator()(Vector<2> x, Vector<1> u, int t) {
@@ -11,7 +11,7 @@ struct System {
 
 struct Cost {
     double operator()(Vector<2> x, Vector<1> u, int t) {
-        return 0.0 * u(0) * u(0);
+        return 0; // dt * (u(0) * u(0) + 0.2 * (x(0) - 3.14) * (x(0) - 3.14));
     }
 };
 
@@ -33,15 +33,13 @@ int main() {
     CostFinal cost_final;
     Constraint constraint;
     Discretized<2, 1, System> disc{dt, system};
-    int N = 120;
+    int N = 60;
     NonlinearModelPredictiveController<2, 1, 1, Discretized<2, 1, System>, Cost, CostFinal, Constraint> nmpc(
             disc, cost, cost_final, constraint,
             Vector<1>(-7), Vector<1>(7),
             Vector<1>(-2), Vector<1>(2),
             N + 1
         );
-
-    std::cerr << "Factoring complete" << std::endl;
 
     Vector<2> x(0, 0);
     Vector<> u = nmpc.plan(x, Vector<2>::Zero());

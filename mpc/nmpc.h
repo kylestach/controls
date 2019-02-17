@@ -196,7 +196,7 @@ public:
     }
 
     Vector<> plan(Vector<N> x0, Vector<N> r) {
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < 50; i++) {
              iterate(x0);
         }
         Vector<> u0 = Vector<>::Zero(M * (L - 1));
