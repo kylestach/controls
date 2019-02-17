@@ -61,6 +61,31 @@ Linearized<N, M, P> linearize(System sys, Vector<N> x, Vector<M> u, int t) {
     return result;
 }
 
+template<int N, int L>
+struct LinearSensor {
+    Matrix<L, N> C;
+    Vector<L> c0;
+};
+
+template<int M, int N, int L, typename System>
+LinearSensor<N, L> linearize_measurement(System sys, Vector<N> x, Vector<M> u, int t) {
+    LinearSensor<N, L> result;
+
+    Vector<L> value = sys(x, u, t);
+
+    const double epsx = 1e-8 * std::max(1e-2, x.norm());
+
+    for (int i = 0; i < N; i++) {
+        Vector<N> dx = Vector<N>::Zero();
+        dx(i) = epsx;
+        result.C.template block<L, 1>(0, i) = (sys(x + dx, u, t) - value) / epsx;
+    }
+
+    result.c = value - result.C * x;
+
+    return result;
+}
+
 template<int N, int M>
 struct Quadratized {
     Matrix<N> Q;
@@ -146,4 +171,10 @@ template<int N, int M>
 struct Policy {
     std::vector<Matrix<M, N>> K;
     std::vector<Matrix<M, 1>> k;
+};
+
+template<int N, int L>
+struct GaussianNoise {
+    Matrix<N> Q;
+    Matrix<L> R;
 };

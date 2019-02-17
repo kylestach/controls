@@ -8,6 +8,7 @@ enable_testing ()
 add_subdirectory (third_party)
 add_subdirectory (mpc)
 add_subdirectory (ilqr)
+add_subdirectory (ekf)
 add_subdirectory (common)
 
 include_directories (${gtest_SOURCE_DIR/include} ${gtest_SOURCE_DIR})
