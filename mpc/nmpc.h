@@ -50,7 +50,7 @@ public:
         Matrix<> Q_aug = Matrix<>::Zero(N * (L - 1), N * (L - 1));
         Matrix<> R_aug = Matrix<>::Zero(M * (L - 1), M * (L - 1));
         Matrix<> q_aug = Matrix<>::Zero(1, N * (L - 1));
-        Matrix<> r_aug = Matrix<>::Zero(1, N * (L - 1));
+        Matrix<> r_aug = Matrix<>::Zero(1, M * (L - 1));
 
         Matrix<> lb_input_aug = Vector<>::Zero(M * (L - 1));
         Matrix<> ub_input_aug = Vector<>::Zero(M * (L - 1));
@@ -128,7 +128,7 @@ public:
         Matrix<> Q_aug = Matrix<>::Zero(N * (L - 1), N * (L - 1));
         Matrix<> R_aug = Matrix<>::Zero(M * (L - 1), M * (L - 1));
         Matrix<> q_aug = Matrix<>::Zero(1, N * (L - 1));
-        Matrix<> r_aug = Matrix<>::Zero(1, N * (L - 1));
+        Matrix<> r_aug = Matrix<>::Zero(1, M * (L - 1));
 
         Matrix<> lb_input_aug = Vector<>::Zero(M * (L - 1));
         Matrix<> ub_input_aug = Vector<>::Zero(M * (L - 1));
