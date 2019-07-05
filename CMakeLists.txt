@@ -10,5 +10,6 @@ add_subdirectory (mpc)
 add_subdirectory (ilqr)
 add_subdirectory (ekf)
 add_subdirectory (common)
+add_subdirectory (rrt)
 
 include_directories (${gtest_SOURCE_DIR/include} ${gtest_SOURCE_DIR})
